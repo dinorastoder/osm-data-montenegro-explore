@@ -1,0 +1,6 @@
+quackosm
+geopandas
+pooch
+leafmap
+#owslib
+streamlit
