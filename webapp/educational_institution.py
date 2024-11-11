@@ -3,7 +3,7 @@ import geopandas as gpd
 
 st.title("Educational institution")
 
-url = "data/osm.kindergarten.20241104.parquet"
+url = "webapp/data/osm.kindergarten.20241104.parquet"
 gdf_kindergarten = gpd.read_parquet(url)
 gdf_kindergarten = gdf_kindergarten.to_crs("EPSG:4326")
 
