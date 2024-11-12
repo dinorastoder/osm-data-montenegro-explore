@@ -11,7 +11,7 @@ m = leafmap.Map(tiles="Cartodb Positron")
 
 m.zoom_to_bounds((18.9894022, 42.3356869, 19.6647575, 42.7089575))
 
-url = "webapp/data/osm.kindergarten.20241104.parquet"
+url = "data/osm.kindergarten.20241104.parquet"
 gdf_kindergarten = gpd.read_parquet(url)
 
 gdf_kindergarten = gdf_kindergarten.to_crs("EPSG:4326")

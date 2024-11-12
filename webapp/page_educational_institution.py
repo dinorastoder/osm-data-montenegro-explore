@@ -2,6 +2,8 @@ import streamlit as st
 import geopandas as gpd
 
 st.title("Educational institution")
+st.sidebar.header("Mapping Demo")
+map_preview = st.sidebar.checkbox("Preview data on map", True)
 
 def load_and_transform_osm_data(url, institution_type):
     gdf_data_original = gpd.read_parquet(url)
@@ -18,9 +20,9 @@ def load_and_transform_osm_data(url, institution_type):
 
 institution_types = ["kindergarten", "school", "university"]
 urls = {
-    "kindergarten": "webapp/data/osm.kindergarten.20241104.parquet",
-    "school": "webapp/data/osm.school.20241104.parquet",
-    "university": "webapp/data/osm.university.20241104.parquet"
+    "kindergarten": "data/osm.kindergarten.20241104.parquet",
+    "school": "data/osm.school.20241104.parquet",
+    "university": "data/osm.university.20241104.parquet"
 }
 
 for institution_type in institution_types:
@@ -34,8 +36,9 @@ for institution_type in institution_types:
         st.dataframe(gdf_data_original)
 
     with col2:
-        st.header(f"{institution_type.capitalize()} in Podgorica, Montenegro (Final Data)")
+        st.header(f"{institution_type.capitalize()} in Podgorica, Montenegro (Final Input Data)")
         st.dataframe(gdf_data_final)
-        gdf_data_final["latitude"] = gdf_data_final["centroid"].y
-        gdf_data_final["longitude"] = gdf_data_final["centroid"].x
-        st.map(data=gdf_data_final, color="#00ff00", zoom=12)
+        if map_preview:
+            gdf_data_final["latitude"] = gdf_data_final["centroid"].y
+            gdf_data_final["longitude"] = gdf_data_final["centroid"].x
+            st.map(data=gdf_data_final, color="#00ff00")

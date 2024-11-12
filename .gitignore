@@ -162,8 +162,9 @@ cython_debug/
 #.idea/
 
 # QuackOSM files
-/cache
-/files
+*/cache
+*/files
+*.pbf
 
 # Streamlit html files
 *.html
