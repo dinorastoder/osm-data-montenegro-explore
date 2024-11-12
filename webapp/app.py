@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.set_page_config(page_title="OSM data for Montenegro", page_icon=":material/dashboard:")
+st.set_page_config(page_title="OSM data for Montenegro (Podgorica)", page_icon=":material/dashboard:",layout="wide")
 
 page = st.navigation([
     st.Page("page_map_overview.py", title="Map overview"),

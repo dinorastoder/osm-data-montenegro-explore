@@ -70,4 +70,4 @@ m.add_geojson(
     }
 )
 
-m.to_streamlit(width=1000, height=800)
+m.to_streamlit(height=900)
