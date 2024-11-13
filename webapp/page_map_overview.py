@@ -60,13 +60,26 @@ m.add_geojson(
 )    
 
 # Add the buffer 500m to the map
-m.add_geojson(
-    gdf_kindergarten_final[["name", "buffer500m"]].rename(columns={"buffer500m": "geometry"}).to_json(),
+m.add_gdf(
+    gdf_kindergarten_final[["name", "buffer500m"]].set_geometry("buffer500m"),
     layer_name="Kindergarten (500m buffer)",
     popup_field="name",
     style={
         "fillColor": "#0000ff",
         "color": "#0000ff"
+    }
+)
+
+# Add the union buffer 500m to the map
+u = gdf_kindergarten_final["buffer500m"].unary_union
+d = {'number': [1], 'geometry': u}
+gdf = gpd.GeoDataFrame(d, crs="EPSG:4326")
+m.add_gdf(
+    gdf,
+    layer_name="Kindergarten (Union 500m buffer)",
+    style={
+        "fillColor": "#000ff0",
+        "color": "#000ff0"
     }
 )
 
