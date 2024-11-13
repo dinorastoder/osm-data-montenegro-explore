@@ -1,42 +1,31 @@
 import streamlit as st
-import geopandas as gpd
+from helper import load_all_data
+
 
 st.title("Educational institution")
 st.sidebar.header("Mapping Demo")
 map_preview = st.sidebar.checkbox("Preview data on map", True)
 
-def load_and_transform_osm_data(url, institution_type):
-    gdf_data_original = gpd.read_parquet(url)
-    gdf_data_original = gdf_data_original.to_crs("EPSG:4326")
-
-    gdf_data_final = gdf_data_original[gdf_data_original["amenity"] == institution_type]
-    gdf_data_final["centroid"] = gdf_data_final.geometry.centroid
-    gdf_data_final = gdf_data_final.reset_index(drop=False)
-    gdf_data_final = gdf_data_final.rename(columns={"feature_id": "osm_feature_id", "geometry": "osm_geometry"})
-    gdf_data_final["institution_type"] = institution_type
-    gdf_data_final["geometry_source"] = "osm"
-    gdf_data_final = gdf_data_final[["institution_type", "name", "centroid", "osm_geometry", "geometry_source", "osm_feature_id"]]
-    return gdf_data_original, gdf_data_final
-
 institution_types = ["kindergarten", "school", "university"]
-urls = {
-    "kindergarten": "data/osm.kindergarten.20241104.parquet",
-    "school": "data/osm.school.20241104.parquet",
-    "university": "data/osm.university.20241104.parquet"
-}
 
 for institution_type in institution_types:
-    url = urls[institution_type]
-    gdf_data_original, gdf_data_final = load_and_transform_osm_data(url, institution_type)
+    
+    if institution_type + '_data_original' not in st.session_state:
+        load_all_data()
+    if institution_type + '_data_final' not in st.session_state:
+        load_all_data()
+
+    gdf_data_original = st.session_state[institution_type + '_data_original']
+    gdf_data_final = st.session_state[institution_type + '_data_final']
 
     # Display the DataFrame in Streamlit
     col1, col2 = st.columns(2)
     with col1:
-        st.header(f"{institution_type.capitalize()} in Podgorica, Montenegro (Raw Data)")
+        st.header(f"{institution_type.capitalize()}(s) in Podgorica, Montenegro (Raw Data)")
         st.dataframe(gdf_data_original)
 
     with col2:
-        st.header(f"{institution_type.capitalize()} in Podgorica, Montenegro (Final Input Data)")
+        st.header(f"{institution_type.capitalize()}(s) in Podgorica, Montenegro (Final Input Data)")
         st.dataframe(gdf_data_final)
         if map_preview:
             gdf_data_final["latitude"] = gdf_data_final["centroid"].y
