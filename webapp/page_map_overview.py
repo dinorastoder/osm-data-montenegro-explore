@@ -69,5 +69,18 @@ m.add_gdf(
     }
 )
 
+if 'bus_line_data_final' not in st.session_state:
+    load_all_data()
+
+gdf_bus_line_final = st.session_state['bus_line_data_final']
+
+m.add_gdf(
+    gdf=gdf_bus_line_final,
+    layer_name="Bus line",
+    popup_field="route_tags",
+    style={
+        "color": "#0000ff"
+    }
+)
 
 m.to_streamlit(height=900)
