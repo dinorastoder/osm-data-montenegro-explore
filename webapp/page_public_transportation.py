@@ -1,5 +1,8 @@
 import streamlit as st
 from osm_data_load_transform import load_osm_parquet, transform_bus_line_osm_data, transform_bus_stop_osm_data
+from pathlib import Path
+
+DATA_DIR = Path(__file__).parent.parent / "data"
 
 st.title("Public transportation")
 st.sidebar.header("Mapping Demo")
@@ -7,8 +10,8 @@ map_preview = st.sidebar.checkbox("Preview data on map", True)
 
 public_transportation_data = ["bus_stop", "bus_line"]
 urls = {
-    "bus_stop": "data/osm.bus_stop.20241104.parquet",
-    "bus_line": "data/osm.bus_line.20241104.parquet",
+    "bus_stop": str(DATA_DIR / "osm.bus_stop.20241104.parquet"),
+    "bus_line": str(DATA_DIR / "osm.bus_line.20241104.parquet"),
 }
 
 for data_type in public_transportation_data:
